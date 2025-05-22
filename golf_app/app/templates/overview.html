@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Course Overview - Golf App{% endblock %}
+
+{% block content %}
+    <h2>Course Overview</h2>
+
+    {% if players %}
+    <table>
+        <thead>
+            <tr>
+                <th>Player Name</th>
+                <th>Current Hole</th>
+                <th>Current Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+            <tr>
+                <td>{{ player.name }}</td>
+                <td>{{ player.current_hole }}</td>
+                <td>{{ player.current_score }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No players on the course yet.</p>
+    {% endif %}
+
+    <h3>Add New Player</h3>
+    <form method="POST" action="{{ url_for('main.add_player') }}">
+        <label for="player_name">Player Name:</label>
+        <input type="text" id="player_name" name="player_name" required>
+        <button type="submit">Add Player</button>
+    </form>
+{% endblock %}

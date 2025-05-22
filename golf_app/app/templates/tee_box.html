@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Tee Box - Hole {{ hole_number }} - Golf App{% endblock %}
+
+{% block content %}
+    <h2>Tee Box - Hole {{ hole_number }}</h2>
+
+    {% if hole_number > 1 %}
+    <h3>Record Score for Hole {{ hole_number - 1 }}</h3>
+    <form method="POST" action="{{ url_for('main.tee_box', hole_number=hole_number) }}">
+        <label for="player_name">Player:</label>
+        <select id="player_name" name="player_name" required>
+            <option value="">--Select Player--</option>
+            {% for player in players %} {# Assumes players are passed to this template #}
+            <option value="{{ player.name }}">{{ player.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="score_value">Score on Hole {{ hole_number - 1 }}:</label>
+        <input type="number" id="score_value" name="score_value" required>
+        <input type="hidden" name="previous_hole" value="{{ hole_number - 1 }}">
+        <br><br>
+        <button type="submit">Record Score & Move to Hole {{ hole_number }}</button>
+    </form>
+    {% else %}
+    <p>This is the first hole. No scores to record for a previous hole.</p>
+    {% endif %}
+
+    <hr>
+    <p><a href="{{ url_for('main.overview') }}">Back to Overview</a></p>
+    {# Assuming 18 holes for now, can be made dynamic later #}
+    {% if hole_number < 18 %}
+    <p><a href="{{ url_for('main.tee_box', hole_number=hole_number+1) }}">Next Hole ({{ hole_number + 1 }})</a></p>
+    {% else %}
+    <p><a href="{{ url_for('main.overview') }}">Round Finished! Back to Overview</a></p>
+    {% endif %}
+{% endblock %}
